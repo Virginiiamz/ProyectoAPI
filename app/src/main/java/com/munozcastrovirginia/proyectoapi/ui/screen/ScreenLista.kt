@@ -1,8 +1,6 @@
 package com.munozcastrovirginia.proyectoapi.ui.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,14 +52,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.munozcastrovirginia.proyectoapi.R
 import com.munozcastrovirginia.proyectoapi.model.Characters
-import com.munozcastrovirginia.proyectoapi.model.RickYMortyViewModel
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.AuthManager
 
 
 // Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLista(auth: AuthManager ,viewModel: RickYMortyViewModel = viewModel(), navigateToLogin:() -> Unit) {
+fun ScreenLista(auth: AuthManager, viewModel: RickYMortyViewModel = viewModel(), navigateToLogin:() -> Unit) {
     val characters by viewModel.characterList.collectAsState()
     val isLoading = characters.isEmpty()
 

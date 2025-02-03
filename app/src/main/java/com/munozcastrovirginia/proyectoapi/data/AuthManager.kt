@@ -1,4 +1,4 @@
-package com.munozcastrovirginia.proyectoapi.ui.data
+package com.munozcastrovirginia.proyectoapi.data
 
 import android.content.Context
 import android.content.Intent

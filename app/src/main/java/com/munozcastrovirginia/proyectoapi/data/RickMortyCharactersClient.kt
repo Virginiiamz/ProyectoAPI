@@ -1,4 +1,4 @@
-package com.munozcastrovirginia.proyectoapi.model
+package com.munozcastrovirginia.proyectoapi.data
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

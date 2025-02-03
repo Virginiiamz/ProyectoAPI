@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.sp
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.auth.GoogleAuthProvider
 import com.munozcastrovirginia.proyectoapi.R
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthManager
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthRes
+import com.munozcastrovirginia.proyectoapi.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.AuthRes
 import com.munozcastrovirginia.proyectoapi.ui.theme.Purple40
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

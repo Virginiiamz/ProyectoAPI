@@ -1,6 +1,5 @@
-package com.munozcastrovirginia.proyectoapi.model
+package com.munozcastrovirginia.proyectoapi.data
 
-import com.munozcastrovirginia.proyectoapi.model.RickMortyCharactersResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 

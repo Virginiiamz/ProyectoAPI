@@ -6,7 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.ui.screen.ForgotPasswordScreen
 import com.munozcastrovirginia.proyectoapi.ui.screen.LoginScreen
 import com.munozcastrovirginia.proyectoapi.ui.screen.ScreenLista

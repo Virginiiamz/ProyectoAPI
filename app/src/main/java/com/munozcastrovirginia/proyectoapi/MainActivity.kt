@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.ui.navegacion.Navegacion
 import com.munozcastrovirginia.proyectoapi.ui.theme.ProyectoAPITheme
 

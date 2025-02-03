@@ -28,8 +28,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthManager
-import com.munozcastrovirginia.proyectoapi.ui.data.AuthRes
+import com.munozcastrovirginia.proyectoapi.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.AuthRes
 import com.munozcastrovirginia.proyectoapi.ui.theme.Purple40
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

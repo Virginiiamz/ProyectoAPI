@@ -1,9 +1,9 @@
-package com.munozcastrovirginia.proyectoapi.model
+package com.munozcastrovirginia.proyectoapi.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.munozcastrovirginia.proyectoapi.data.RickMortyCharactersClient
 import com.munozcastrovirginia.proyectoapi.model.Characters
-import com.munozcastrovirginia.proyectoapi.model.RickMortyCharactersClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
