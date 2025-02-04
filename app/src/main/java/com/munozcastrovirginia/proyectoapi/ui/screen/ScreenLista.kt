@@ -133,7 +133,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}
+                onClick = {inicioViewModel.onAddAsignaturaSelected()}
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura")
             }
