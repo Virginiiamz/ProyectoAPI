@@ -8,6 +8,7 @@ import com.munozcastrovirginia.proyectoapi.model.Asignatura
 import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 
 class FirestoreManager(auth: AuthManager, context: Context) {
     private val firestore = FirebaseFirestore.getInstance()
@@ -35,5 +36,34 @@ class FirestoreManager(auth: AuthManager, context: Context) {
                     }
                 }
             }
+    }
+
+    suspend fun addAsignatura(asignatura: Asignatura){
+        firestore.collection(ASIGNATURA_COLLECTION).add(asignatura).await()
+    }
+
+    suspend fun updateAsignatura(asignatura: Asignatura) {
+        val asignaturaRef = asignatura.id?.let {
+            firestore.collection("Asignaturas").document(it)
+        }
+        asignaturaRef?.set(asignatura)?.await()
+    }
+
+    suspend fun deleteAsignaturaById(asignaturaId: String) {
+        firestore.collection("Asignaturas").document(asignaturaId).delete().await()
+    }
+
+    fun getAsignaturaId(id: String): Asignatura {
+        return firestore.collection(ASIGNATURA_COLLECTION).document(id)
+            .get().result?.toObject(AsignaturaDB::class.java)?.let {
+                Asignatura(
+                    id = id,
+                    userId = it.userId,
+                    codigo = it.codigo,
+                    nombre = it.nombre,
+                    descripcion = it.descripcion,
+                    horas = it.horas
+                )
+            }!!
     }
 }

@@ -30,6 +30,35 @@ class InicioViewModel(val firestoreManager: FirestoreManager): ViewModel() {
             }
         }
     }
+
+    fun addAsignatura(asignatura: Asignatura) {
+        viewModelScope.launch {
+            firestoreManager.addAsignatura(asignatura)
+        }
+    }
+    fun deleteAsignaturaById(asignaturaId: String) {
+        if (asignaturaId.isEmpty()) return
+        viewModelScope.launch {
+            firestoreManager.deleteAsignaturaById(asignaturaId)
+        }
+    }
+    fun updateAsignatura(asignatura: Asignatura) {
+        viewModelScope.launch {
+            firestoreManager.updateAsignatura(asignatura)
+        }
+    }
+
+    fun onAddAsignaturaSelected() {
+        _uiState.update { it.copy(showAddAsignaturaDialog = true) }
+    }
+    fun dismisShowAddAsignaturaDialog() {
+        _uiState.update { it.copy(showAddAsignaturaDialog = false) }
+    }
+    fun onLogoutSelected() {
+        _uiState.update { it.copy(showLogoutDialog = true) }
+    }
+    fun dismisShowLogoutDialog() {
+        _uiState.update { it.copy(showLogoutDialog = false) }
 }
 
 data class UiState(
