@@ -142,7 +142,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
         Box(
             modifier = Modifier.fillMaxSize().padding(it)
         ){
-            if (showDialog){
+            if (uiState.showLogoutDialog){
                 LogoutDialog(
                     onDismiss = { showDialog = false },
                     onConfirm = {

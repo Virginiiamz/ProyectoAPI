@@ -59,6 +59,7 @@ class InicioViewModel(val firestoreManager: FirestoreManager): ViewModel() {
     }
     fun dismisShowLogoutDialog() {
         _uiState.update { it.copy(showLogoutDialog = false) }
+    }
 }
 
 data class UiState(
