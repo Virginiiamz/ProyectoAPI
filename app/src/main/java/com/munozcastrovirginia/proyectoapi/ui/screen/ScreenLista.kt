@@ -17,12 +17,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,9 +55,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.munozcastrovirginia.proyectoapi.R
-import com.munozcastrovirginia.proyectoapi.model.Characters
 import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
+import com.munozcastrovirginia.proyectoapi.model.Asignatura
+import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 
 
 // Composable que muestra la lista de personajes
@@ -67,6 +72,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
     val user = auth.getCurrentUser()
     val factory = InicioViewModelFactory(firestore)
     val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factory)
+    val uiState by inicioViewModel.uiState.collectAsState()
 
     Scaffold (
         topBar = {
@@ -124,6 +130,13 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                     }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {}
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura")
+            }
         }
     ){
         Box(
@@ -140,20 +153,25 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                 )
             }
 
-//            if (isLoading) {
-//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-//                    CircularProgressIndicator()
-//                }
-//            } else {
-//                LazyColumn(
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    items(characters) { character ->
-//                        CharacterItem(character = character)
-//                        Spacer(modifier = Modifier.height(8.dp))
-//                    }
-//                }
-//            }
+            if (!uiState.asignaturas.isNullOrEmpty()) {
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    items(uiState.asignaturas) { asignatura ->
+                        AsignaturaItem(
+                            asignatura = asignatura, {}
+//                            inicioViewModel.deleteAsignaturaById(asignatura.id ?: "")
+                        ) {
+//                            inicioViewModel.updateAsignatura(it)
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
         }
     }
 
@@ -161,7 +179,32 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
 }
 
 @Composable
-fun CharacterItem(character: Characters) {
+fun AsignaturaItem(asignatura: Asignatura, deleteAsignatura: () -> Unit, updateAsignatura: (Asignatura) -> Unit) {
+
+    var showDeleteAsignaturaDialog by remember { mutableStateOf(false) }
+    var showUpdateAsignaturaDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteAsignaturaDialog) {
+//        DeleteAsignaturaDialog(
+//            onConfirmDelete = {
+//                deleteAsignatura()
+//                showDeleteAsignaturaDialog = false
+//            },
+//            onDismiss = { showDeleteAsignaturaDialog = false }
+//        )
+    }
+
+    if (showUpdateAsignaturaDialog) {
+//        UpdateAsignaturaDialog(
+//            asignatura = asignatura,
+//            onAsignaturaUpdate = { asignatura ->
+//                onUpdateAsignatura(asignatura)
+//                showUpdateAsignaturaDialog = false
+//            },
+//            onDialogDimissed = { showUpdateAsignaturaDialog = false}
+//        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,17 +213,35 @@ fun CharacterItem(character: Characters) {
 
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
-            AsyncImage(
-                model = character.image,
-                contentDescription = character.name,
-                modifier = Modifier.size(64.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
+//            AsyncImage(
+//                model = character.image,
+//                contentDescription = character.name,
+//                modifier = Modifier.size(64.dp)
+//            )
+//            Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = character.name, style = MaterialTheme.typography.titleLarge)
-                Text(text = "Species: ${character.species}", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Status: ${character.status}", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Location: ${character.location.name ?: "Unknown"}", style = MaterialTheme.typography.bodySmall)
+                Text(text = asignatura.codigo?: "", style = MaterialTheme.typography.titleLarge)
+                Text(text = "Nombre: ${asignatura.nombre}", style = MaterialTheme.typography.bodySmall)
+                Text(text = "Descripcion: ${asignatura.descripcion}", style = MaterialTheme.typography.bodySmall)
+                Text(text = "Horas: ${asignatura.horas}", style = MaterialTheme.typography.bodySmall)
+            }
+        }
+        Row(modifier = Modifier.padding(16.dp)) {
+            IconButton(
+                onClick = {showDeleteAsignaturaDialog = true}
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Borrar Asignatura"
+                )
+            }
+            IconButton(
+                onClick = {showUpdateAsignaturaDialog = true}
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Actualizar Asignatura"
+                )
             }
         }
     }
