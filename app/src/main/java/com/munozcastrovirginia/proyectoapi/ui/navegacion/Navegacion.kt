@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.munozcastrovirginia.proyectoapi.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
 import com.munozcastrovirginia.proyectoapi.ui.screen.ForgotPasswordScreen
 import com.munozcastrovirginia.proyectoapi.ui.screen.LoginScreen
 import com.munozcastrovirginia.proyectoapi.ui.screen.ScreenLista
@@ -15,6 +16,8 @@ import com.munozcastrovirginia.proyectoapi.ui.screen.SignUpScreen
 @Composable
 fun Navegacion(auth: AuthManager) {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val firestore = FirestoreManager(auth, context)
 
     NavHost(
         navController = navController,
@@ -49,7 +52,7 @@ fun Navegacion(auth: AuthManager) {
         composable<listaPersonajes> {
             ScreenLista(
                 auth,
-                viewModel(),
+                firestore,
                 {
                     navController.navigate(login) {
                         popUpTo(listaPersonajes){ inclusive = true }
@@ -57,5 +60,18 @@ fun Navegacion(auth: AuthManager) {
                 }
             )
         }
+
+//        composable<listaPersonajes> {
+//            ScreenLista(
+//                auth,
+//                firestore,
+//                viewModel(),
+//                {
+//                    navController.navigate(login) {
+//                        popUpTo(listaPersonajes){ inclusive = true }
+//                    }
+//                }
+//            )
+//        }
     }
 }

@@ -53,17 +53,20 @@ import coil.request.ImageRequest
 import com.munozcastrovirginia.proyectoapi.R
 import com.munozcastrovirginia.proyectoapi.model.Characters
 import com.munozcastrovirginia.proyectoapi.data.AuthManager
+import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
 
 
 // Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLista(auth: AuthManager, viewModel: RickYMortyViewModel = viewModel(), navigateToLogin:() -> Unit) {
-    val characters by viewModel.characterList.collectAsState()
-    val isLoading = characters.isEmpty()
+fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:() -> Unit) {
+//    val characters by viewModel2.characterList.collectAsState()
+//    val isLoading = characters.isEmpty()
 
     var showDialog by remember { mutableStateOf(false) }
     val user = auth.getCurrentUser()
+    val factory = InicioViewModelFactory(firestore)
+    val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factory)
 
     Scaffold (
         topBar = {
@@ -137,20 +140,20 @@ fun ScreenLista(auth: AuthManager, viewModel: RickYMortyViewModel = viewModel(),
                 )
             }
 
-            if (isLoading) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    items(characters) { character ->
-                        CharacterItem(character = character)
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
+//            if (isLoading) {
+//                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                    CircularProgressIndicator()
+//                }
+//            } else {
+//                LazyColumn(
+//                    modifier = Modifier.padding(16.dp)
+//                ) {
+//                    items(characters) { character ->
+//                        CharacterItem(character = character)
+//                        Spacer(modifier = Modifier.height(8.dp))
+//                    }
+//                }
+//            }
         }
     }
 
