@@ -63,31 +63,27 @@ fun AddAsignaturaDialog(onAsignaturaAdded: (Asignatura) -> Unit, onDialogDismiss
                     onValueChange = { codigo = it },
                     label = { Text("Código") }
                 )
+                Spacer(modifier = Modifier.height(10.dp))
+                    TextField(
+                        value = nombre,
+                        onValueChange = { nombre = it },
+                        label = { Text("Nombre") }
+                    )
+                Spacer(modifier = Modifier.height(10.dp))
+                    TextField(
+                        value = descripcion,
+                        onValueChange = { descripcion = it },
+                        label = { Text("Descripcion") }
+                    )
+                Spacer(modifier = Modifier.height(10.dp))
+                    TextField(
+                        value = horas.toString(),
+                        onValueChange = { horas = it.toInt() },
+                        label = { Text("Total de horas") }
+                    )
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            Column {
-                TextField(
-                    value = nombre,
-                    onValueChange = { nombre = it },
-                    label = { Text("Nombre") }
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Column {
-                TextField(
-                    value = descripcion,
-                    onValueChange = { descripcion = it },
-                    label = { Text("Descripcion") }
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Column {
-                TextField(
-                    value = horas.toString(),
-                    onValueChange = { horas = it.toInt() },
-                    label = { Text("Total de horas") }
-                )
-            }
+
+
         }
 
     )
