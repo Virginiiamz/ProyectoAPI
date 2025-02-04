@@ -153,6 +153,26 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                 )
             }
 
+            if (uiState.showAddAsignaturaDialog) {
+                AddAsignaturaDialog(
+                    onAsignaturaAdded = { asignatura ->
+                        inicioViewModel.addAsignatura(
+                            Asignatura(
+                                id = "",
+                                userId = auth.getCurrentUser()?.uid,
+                                asignatura.codigo?: "",
+                                asignatura.nombre ?: "",
+                                asignatura.descripcion ?: "",
+                                asignatura.horas?: 0
+                            )
+
+                        )
+                    },
+                    onDialogDismissed = {inicioViewModel.dismisShowAddAsignaturaDialog()},
+                    auth
+                )
+            }
+
             if (!uiState.asignaturas.isNullOrEmpty()) {
                 LazyColumn(
                     modifier = Modifier.padding(16.dp)
