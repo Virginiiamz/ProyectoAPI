@@ -1,6 +1,7 @@
 package com.munozcastrovirginia.proyectoapi.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -64,7 +66,7 @@ import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 // Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:() -> Unit) {
+fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin: () -> Unit) {
 //    val characters by viewModel2.characterList.collectAsState()
 //    val isLoading = characters.isEmpty()
 
@@ -74,7 +76,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
     val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factory)
     val uiState by inicioViewModel.uiState.collectAsState()
 
-    Scaffold (
+    Scaffold(
         topBar = {
             TopAppBar(
                 title = {
@@ -82,7 +84,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if(user?.photoUrl != null){
+                        if (user?.photoUrl != null) {
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
                                     .data(user?.photoUrl)
@@ -114,41 +116,55 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                                 overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                text =  user?.email ?: "Sin correo",
+                                text = user?.email ?: "Sin correo",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis)
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(ContextCompat.getColor(LocalContext.current, R.color.gris_oscuro))),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(
+                        ContextCompat.getColor(
+                            LocalContext.current,
+                            R.color.gris_oscuro
+                        )
+                    )
+                ),
                 actions = {
                     IconButton(onClick = {
-                        showDialog = true
+                        inicioViewModel.onLogoutSelected()
                     }) {
-                        Icon(Icons.AutoMirrored.Outlined.ExitToApp, contentDescription = "Cerrar sesión")
+                        Icon(
+                            Icons.AutoMirrored.Outlined.ExitToApp,
+                            contentDescription = "Cerrar sesión"
+                        )
                     }
                 }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {inicioViewModel.onAddAsignaturaSelected()}
+                onClick = { inicioViewModel.onAddAsignaturaSelected() },
+                containerColor = Color.Gray
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura")
             }
         }
-    ){
+    ) {
         Box(
-            modifier = Modifier.fillMaxSize().padding(it)
-        ){
-            if (uiState.showLogoutDialog){
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            if (uiState.showLogoutDialog) {
                 LogoutDialog(
-                    onDismiss = { showDialog = false },
+                    onDismiss = { inicioViewModel.dismisShowLogoutDialog() },
                     onConfirm = {
                         auth.signOut()
                         navigateToLogin()
-                        showDialog = false
+                        inicioViewModel.dismisShowLogoutDialog()
                     }
                 )
             }
@@ -160,16 +176,16 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                             Asignatura(
                                 id = "",
                                 userId = auth.getCurrentUser()?.uid,
-                                asignatura.codigo?: "",
+                                asignatura.codigo ?: "",
                                 asignatura.nombre ?: "",
                                 asignatura.descripcion ?: "",
-                                asignatura.horas?: 0
+                                asignatura.horas ?: 0
                             )
 
                         )
                         inicioViewModel.dismisShowAddAsignaturaDialog()
                     },
-                    onDialogDismissed = {inicioViewModel.dismisShowAddAsignaturaDialog()},
+                    onDialogDismissed = { inicioViewModel.dismisShowAddAsignaturaDialog() },
                     auth
                 )
             }
@@ -180,8 +196,8 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                 ) {
                     items(uiState.asignaturas) { asignatura ->
                         AsignaturaItem(
-                            asignatura = asignatura, {}
-//                            inicioViewModel.deleteAsignaturaById(asignatura.id ?: "")
+                            asignatura = asignatura,
+                            { inicioViewModel.deleteAsignaturaById(asignatura.id ?: "") }
                         ) {
                             inicioViewModel.updateAsignatura(it)
                         }
@@ -190,7 +206,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                 }
             } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    Text("No hay datos")
                 }
             }
         }
@@ -200,19 +216,23 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
 }
 
 @Composable
-fun AsignaturaItem(asignatura: Asignatura, deleteAsignatura: () -> Unit, updateAsignatura: (Asignatura) -> Unit) {
+fun AsignaturaItem(
+    asignatura: Asignatura,
+    deleteAsignatura: () -> Unit,
+    updateAsignatura: (Asignatura) -> Unit
+) {
 
     var showDeleteAsignaturaDialog by remember { mutableStateOf(false) }
     var showUpdateAsignaturaDialog by remember { mutableStateOf(false) }
 
     if (showDeleteAsignaturaDialog) {
-//        DeleteAsignaturaDialog(
-//            onConfirmDelete = {
-//                deleteAsignatura()
-//                showDeleteAsignaturaDialog = false
-//            },
-//            onDismiss = { showDeleteAsignaturaDialog = false }
-//        )
+        DeleteAsignaturaDialog(
+            onConfirmDelete = {
+                deleteAsignatura()
+                showDeleteAsignaturaDialog = false
+            },
+            onDismiss = { showDeleteAsignaturaDialog = false }
+        )
     }
 
     if (showUpdateAsignaturaDialog) {
@@ -222,7 +242,7 @@ fun AsignaturaItem(asignatura: Asignatura, deleteAsignatura: () -> Unit, updateA
                 updateAsignatura(asignatura)
                 showUpdateAsignaturaDialog = false
             },
-            onDialogDismissed = { showUpdateAsignaturaDialog = false}
+            onDialogDismissed = { showUpdateAsignaturaDialog = false }
         )
     }
 
@@ -234,34 +254,39 @@ fun AsignaturaItem(asignatura: Asignatura, deleteAsignatura: () -> Unit, updateA
 
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
-//            AsyncImage(
-//                model = character.image,
-//                contentDescription = character.name,
-//                modifier = Modifier.size(64.dp)
-//            )
-//            Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = asignatura.codigo?: "", style = MaterialTheme.typography.titleLarge)
-                Text(text = "Nombre: ${asignatura.nombre}", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Descripcion: ${asignatura.descripcion}", style = MaterialTheme.typography.bodySmall)
-                Text(text = "Horas: ${asignatura.horas}", style = MaterialTheme.typography.bodySmall)
-            }
-        }
-        Row(modifier = Modifier.padding(16.dp)) {
-            IconButton(
-                onClick = {showDeleteAsignaturaDialog = true}
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Borrar Asignatura"
+                Text(text = asignatura.codigo ?: "", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = "Nombre: ${asignatura.nombre}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = "Descripcion: ${asignatura.descripcion}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = "Horas: ${asignatura.horas}",
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
+        }
+        Row(modifier = Modifier
+            .padding(16.dp)
+            .align(AbsoluteAlignment.Right)) {
             IconButton(
-                onClick = {showUpdateAsignaturaDialog = true}
+                onClick = { showUpdateAsignaturaDialog = true }
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Actualizar Asignatura"
+                )
+            }
+            IconButton(
+                onClick = { showDeleteAsignaturaDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Borrar Asignatura"
                 )
             }
         }
