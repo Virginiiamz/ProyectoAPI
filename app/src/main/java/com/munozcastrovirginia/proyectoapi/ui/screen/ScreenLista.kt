@@ -183,7 +183,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                             asignatura = asignatura, {}
 //                            inicioViewModel.deleteAsignaturaById(asignatura.id ?: "")
                         ) {
-//                            inicioViewModel.updateAsignatura(it)
+                            inicioViewModel.updateAsignatura(it)
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -216,14 +216,14 @@ fun AsignaturaItem(asignatura: Asignatura, deleteAsignatura: () -> Unit, updateA
     }
 
     if (showUpdateAsignaturaDialog) {
-//        UpdateAsignaturaDialog(
-//            asignatura = asignatura,
-//            onAsignaturaUpdate = { asignatura ->
-//                onUpdateAsignatura(asignatura)
-//                showUpdateAsignaturaDialog = false
-//            },
-//            onDialogDimissed = { showUpdateAsignaturaDialog = false}
-//        )
+        UpdateAsignaturaDialog(
+            asignatura = asignatura,
+            onAsignaturaUpdated = { asignatura ->
+                updateAsignatura(asignatura)
+                showUpdateAsignaturaDialog = false
+            },
+            onDialogDismissed = { showUpdateAsignaturaDialog = false}
+        )
     }
 
     Card(

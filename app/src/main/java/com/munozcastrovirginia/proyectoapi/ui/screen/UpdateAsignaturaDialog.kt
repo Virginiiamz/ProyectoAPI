@@ -17,67 +17,66 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.model.Asignatura
 
 @Composable
-fun AddAsignaturaDialog(
-    onAsignaturaAdded: (Asignatura) -> Unit,
-    onDialogDismissed: () -> Unit,
-    auth: AuthManager
+fun UpdateAsignaturaDialog(
+    asignatura: Asignatura,
+    onAsignaturaUpdated: (Asignatura) -> Unit,
+    onDialogDismissed: () -> Unit
 ) {
-
-    var codigo by remember { mutableStateOf("") }
-    var nombre by remember { mutableStateOf("") }
-    var descripcion by remember { mutableStateOf("") }
-    var horas by remember { mutableIntStateOf(0) }
+    var codigo by remember { mutableStateOf(asignatura.codigo) }
+    var nombre by remember { mutableStateOf(asignatura.nombre) }
+    var descripcion by remember { mutableStateOf(asignatura.descripcion) }
+    var horas by remember { mutableIntStateOf(asignatura.horas!!) }
 
     AlertDialog(
-        title = { Text("Añadir asignatura") },
-        onDismissRequest = { onDialogDismissed() },
+        title = { Text(text = "Actualizar asignatura") },
+        onDismissRequest = {},
         confirmButton = {
             Button(
                 onClick = {
                     val newAsignatura = Asignatura(
-                        userId = auth.getCurrentUser()?.uid,
+                        id = asignatura.id,
+                        userId = asignatura.userId,
                         codigo = codigo,
                         nombre = nombre,
                         descripcion = descripcion,
                         horas = horas
                     )
-                    onAsignaturaAdded(newAsignatura)
+                    onAsignaturaUpdated(newAsignatura)
                     codigo = ""
                     nombre = ""
                     descripcion = ""
                     horas = 0
                 }
             ) {
-                Text("Añadir")
+                Text(text = "Actualizar")
             }
         },
         dismissButton = {
             Button(
                 onClick = { onDialogDismissed() }
             ) {
-                Text("Cancelar")
+                Text(text = "Cancelar")
             }
         },
         text = {
-            Column {
+            Column() {
                 TextField(
-                    value = codigo,
+                    value = codigo ?: "",
                     onValueChange = { codigo = it },
                     label = { Text("Código") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 TextField(
-                    value = nombre,
+                    value = nombre ?: "",
                     onValueChange = { nombre = it },
                     label = { Text("Nombre") }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 TextField(
-                    value = descripcion,
+                    value = descripcion ?: "",
                     onValueChange = { descripcion = it },
                     label = { Text("Descripcion") }
                 )
@@ -92,10 +91,6 @@ fun AddAsignaturaDialog(
                     )
                 )
             }
-
-
         }
-
     )
-
 }
