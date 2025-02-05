@@ -167,6 +167,7 @@ fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin:
                             )
 
                         )
+                        inicioViewModel.dismisShowAddAsignaturaDialog()
                     },
                     onDialogDismissed = {inicioViewModel.dismisShowAddAsignaturaDialog()},
                     auth
