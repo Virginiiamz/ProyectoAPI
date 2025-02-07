@@ -204,7 +204,7 @@ fun ScreenDetalle(
                         ProfesorItem(
                             profesor = profesor,
                             deleteProfesor = {
-                                inicioViewModel.deleteAsignaturaById(
+                                detalleViewModel.deleteProfesoraById(
                                     profesor.id ?: ""
                                 )
                             },
@@ -234,15 +234,15 @@ fun ProfesorItem(
     var showDeleteProfesorDialog by remember { mutableStateOf(false) }
     var showUpdateProfesorDialog by remember { mutableStateOf(false) }
 
-//    if (showDeleteProfesorDialog) {
-//        DeleteAsignaturaDialog(
-//            onConfirmDelete = {
-//                deleteAsignatura()
-//                showDeleteProfesorDialog = false
-//            },
-//            onDismiss = { showDeleteProfesorDialog = false }
-//        )
-//    }
+    if (showDeleteProfesorDialog) {
+        DeleteProfesorDialog(
+            onConfirmDelete = {
+                deleteProfesor()
+                showDeleteProfesorDialog = false
+            },
+            onDismiss = { showDeleteProfesorDialog = false }
+        )
+    }
 
     if (showUpdateProfesorDialog) {
         UpdateProfesorDialog(

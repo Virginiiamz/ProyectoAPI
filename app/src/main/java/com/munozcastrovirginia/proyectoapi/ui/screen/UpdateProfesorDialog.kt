@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.munozcastrovirginia.proyectoapi.model.Asignatura
@@ -65,19 +66,28 @@ fun UpdateProfesorDialog(
                 TextField(
                     value = nombre ?: "",
                     onValueChange = { nombre = it },
-                    label = { Text("Nombre") }
+                    label = { Text("Nombre") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    )
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 TextField(
                     value = apellidos ?: "",
                     onValueChange = { apellidos = it },
-                    label = { Text("Apellidos") }
+                    label = { Text("Apellidos") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    )
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 TextField(
                     value = email ?: "",
                     onValueChange = { email = it },
-                    label = { Text("Email") }
+                    label = { Text("Email") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    )
                 )
             }
         }

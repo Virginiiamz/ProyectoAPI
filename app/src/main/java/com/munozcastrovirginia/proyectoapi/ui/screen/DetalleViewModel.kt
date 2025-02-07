@@ -48,6 +48,13 @@ class DetalleViewModel(val firestoreManager: FirestoreManager, idAsignatura: Str
         }
     }
 
+    fun deleteProfesoraById(profesorId: String) {
+        if (profesorId.isEmpty()) return
+        viewModelScope.launch {
+            firestoreManager.deleteProfesorById(profesorId)
+        }
+    }
+
     fun onAddProfesorSelected() {
         _uiState.update { it.copy(showAddProfesorDialog = true) }
     }

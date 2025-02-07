@@ -108,4 +108,8 @@ class FirestoreManager(auth: AuthManager, context: Context) {
             "email", profesor.email
         )?.await()
     }
+
+    suspend fun deleteProfesorById(profesorId: String) {
+        firestore.collection("Profesores").document(profesorId).delete().await()
+    }
 }
