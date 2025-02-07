@@ -5,6 +5,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
 import com.munozcastrovirginia.proyectoapi.ui.screen.ForgotPasswordScreen
@@ -58,14 +59,16 @@ fun Navegacion(auth: AuthManager) {
                         popUpTo(screenInicio){ inclusive = true }
                     }
                 },
-                {
-                    navController.navigate(screenDetalle)
+                { id ->
+                    navController.navigate(screenDetalle(id))
                 }
             )
         }
 
-        composable<screenDetalle> {
-            ScreenDetalle()
+        composable<screenDetalle> { backStackEntry ->
+            val detalle = backStackEntry.toRoute<screenDetalle>()
+            val id = detalle.id
+            ScreenDetalle(id)
         }
 
 //        composable<listaPersonajes> {

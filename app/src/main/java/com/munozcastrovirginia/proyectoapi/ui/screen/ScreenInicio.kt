@@ -71,7 +71,7 @@ fun ScreenInicio(
     auth: AuthManager,
     firestore: FirestoreManager,
     navigateToLogin: () -> Unit,
-    navigateToDetalle: () -> Unit
+    navigateToDetalle: (String) -> Unit
 ) {
 //    val characters by viewModel2.characterList.collectAsState()
 //    val isLoading = characters.isEmpty()
@@ -209,7 +209,7 @@ fun ScreenInicio(
                                 )
                             },
                             updateAsignatura = { inicioViewModel.updateAsignatura(asignatura) },
-                            navigateToDetalle = { navigateToDetalle() }
+                            navigateToDetalle = { asignatura.id?.let { it1 -> navigateToDetalle(it1) } }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
@@ -230,7 +230,7 @@ fun AsignaturaItem(
     asignatura: Asignatura,
     deleteAsignatura: () -> Unit,
     updateAsignatura: (Asignatura) -> Unit,
-    navigateToDetalle: () -> Unit
+    navigateToDetalle: (String) -> Unit
 ) {
 
     var showDeleteAsignaturaDialog by remember { mutableStateOf(false) }
@@ -261,7 +261,7 @@ fun AsignaturaItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { navigateToDetalle() },
+            .clickable { asignatura.id?.let { navigateToDetalle(it) } },
         elevation = CardDefaults.cardElevation(4.dp)
 
 

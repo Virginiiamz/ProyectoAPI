@@ -16,5 +16,5 @@ object forgotPassword
 object screenInicio
 
 @Serializable
-object screenDetalle
+data class screenDetalle(val id: String)
 
