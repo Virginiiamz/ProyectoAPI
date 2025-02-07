@@ -6,7 +6,10 @@ import com.google.firebase.firestore.snapshots
 import com.google.firebase.firestore.toObject
 import com.munozcastrovirginia.proyectoapi.model.Asignatura
 import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
+import com.munozcastrovirginia.proyectoapi.model.Profesor
+import com.munozcastrovirginia.proyectoapi.model.ProfesorDB
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
@@ -16,8 +19,10 @@ class FirestoreManager(auth: AuthManager, context: Context) {
 
     companion object {
         const val ASIGNATURA_COLLECTION = "Asignaturas"
+        const val PROFESOR_COLLECTION = "Profesores"
     }
 
+    //    Funciones de las asignaturas
     fun getAsignaturas(): Flow<List<Asignatura>> {
         return firestore.collection(ASIGNATURA_COLLECTION)
             .whereEqualTo("userId", userId)
@@ -65,5 +70,31 @@ class FirestoreManager(auth: AuthManager, context: Context) {
                     horas = it.horas
                 )
             }!!
+    }
+
+//    Funciones de los profesores
+
+    fun getProfesores(): Flow<List<Profesor>> {
+        return firestore.collection(PROFESOR_COLLECTION)
+            .whereEqualTo("userId", userId)
+            .snapshots()
+            .map { qs ->
+                qs.documents.mapNotNull { ds ->
+                    ds.toObject(ProfesorDB::class.java)?.let { profesorDB ->
+                        Profesor(
+                            id = ds.id,
+                            asignaturaId = profesorDB.asignaturaId,
+                            userId = profesorDB.userId,
+                            nombre = profesorDB.nombre,
+                            apellidos = profesorDB.apellidos,
+                            email = profesorDB.email,
+                        )
+                    }
+                }
+            }
+    }
+
+    suspend fun addProfesor(profesor: Profesor) {
+        firestore.collection(PROFESOR_COLLECTION).add(profesor).await()
     }
 }
