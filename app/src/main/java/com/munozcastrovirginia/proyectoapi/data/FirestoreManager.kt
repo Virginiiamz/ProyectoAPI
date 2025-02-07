@@ -100,7 +100,7 @@ class FirestoreManager(auth: AuthManager, context: Context) {
 
     suspend fun updateProfesor(profesor: Profesor) {
         val profesorRef = profesor.id?.let {
-            firestore.collection("Profesores").document(it)
+            firestore.collection(PROFESOR_COLLECTION).document(it)
         }
         profesorRef?.set(profesor)?.await()
     }
