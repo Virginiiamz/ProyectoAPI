@@ -42,6 +42,12 @@ class DetalleViewModel(val firestoreManager: FirestoreManager, idAsignatura: Str
         }
     }
 
+    fun updateProfesor(profesor: Profesor) {
+        viewModelScope.launch {
+            firestoreManager.updateProfesor(profesor)
+        }
+    }
+
     fun onAddProfesorSelected() {
         _uiState.update { it.copy(showAddProfesorDialog = true) }
     }

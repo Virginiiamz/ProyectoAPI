@@ -97,4 +97,15 @@ class FirestoreManager(auth: AuthManager, context: Context) {
     suspend fun addProfesor(profesor: Profesor) {
         firestore.collection(PROFESOR_COLLECTION).add(profesor).await()
     }
+
+    suspend fun updateProfesor(profesor: Profesor) {
+        val profesorRef = profesor.id?.let {
+            firestore.collection("Profesores").document(it)
+        }
+        profesorRef?.update(
+            "nombre", profesor.nombre,
+            "apellidos", profesor.apellidos,
+            "email", profesor.email
+        )?.await()
+    }
 }

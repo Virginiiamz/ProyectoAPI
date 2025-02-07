@@ -209,7 +209,7 @@ fun ScreenDetalle(
                                 )
                             },
                             updateProfesor = {
-//                                inicioViewModel.updateAsignatura(profesor)
+                                detalleViewModel.updateProfesor(profesor)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -244,16 +244,16 @@ fun ProfesorItem(
 //        )
 //    }
 
-//    if (showUpdateProfesorDialog) {
-//        UpdateAsignaturaDialog(
-//            asignatura = asignatura,
-//            onAsignaturaUpdated = { asignatura ->
-//                updateAsignatura(asignatura)
-//                showUpdateAsignaturaDialog = false
-//            },
-//            onDialogDismissed = { showUpdateAsignaturaDialog = false }
-//        )
-//    }
+    if (showUpdateProfesorDialog) {
+        UpdateProfesorDialog(
+            profesor = profesor,
+            onProfesorUpdated = { profesor ->
+                updateProfesor(profesor)
+                showUpdateProfesorDialog = false
+            },
+            onDialogDismissed = { showUpdateProfesorDialog = false }
+        )
+    }
 
     Card(
         modifier = Modifier
