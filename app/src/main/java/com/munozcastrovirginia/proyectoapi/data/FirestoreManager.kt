@@ -38,7 +38,7 @@ class FirestoreManager(auth: AuthManager, context: Context) {
             }
     }
 
-    suspend fun addAsignatura(asignatura: Asignatura){
+    suspend fun addAsignatura(asignatura: Asignatura) {
         firestore.collection(ASIGNATURA_COLLECTION).add(asignatura).await()
     }
 
@@ -53,9 +53,9 @@ class FirestoreManager(auth: AuthManager, context: Context) {
         firestore.collection("Asignaturas").document(asignaturaId).delete().await()
     }
 
-    fun getAsignaturaId(id: String): Asignatura {
+    suspend fun getAsignaturaById(id: String): Asignatura? {
         return firestore.collection(ASIGNATURA_COLLECTION).document(id)
-            .get().result?.toObject(AsignaturaDB::class.java)?.let {
+            .get().await().toObject(AsignaturaDB::class.java)?.let {
                 Asignatura(
                     id = id,
                     userId = it.userId,

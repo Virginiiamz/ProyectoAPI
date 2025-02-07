@@ -68,7 +68,7 @@ fun Navegacion(auth: AuthManager) {
         composable<screenDetalle> { backStackEntry ->
             val detalle = backStackEntry.toRoute<screenDetalle>()
             val id = detalle.id
-            ScreenDetalle(id)
+            ScreenDetalle(id, auth, firestore)
         }
 
 //        composable<listaPersonajes> {

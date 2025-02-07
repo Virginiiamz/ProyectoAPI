@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class InicioViewModel(val firestoreManager: FirestoreManager): ViewModel() {
+class InicioViewModel(val firestoreManager: FirestoreManager) : ViewModel() {
 
     val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
+
+    private val _asignatura = MutableStateFlow<Asignatura?>(null)
+    val asignatura: StateFlow<Asignatura?> = _asignatura
 
     init {
         viewModelScope.launch {
@@ -36,27 +39,38 @@ class InicioViewModel(val firestoreManager: FirestoreManager): ViewModel() {
             firestoreManager.addAsignatura(asignatura)
         }
     }
+
     fun deleteAsignaturaById(asignaturaId: String) {
         if (asignaturaId.isEmpty()) return
         viewModelScope.launch {
             firestoreManager.deleteAsignaturaById(asignaturaId)
         }
     }
+
     fun updateAsignatura(asignatura: Asignatura) {
         viewModelScope.launch {
             firestoreManager.updateAsignatura(asignatura)
         }
     }
 
+    fun getAsignaturaById(asignaturaId: String) {
+        viewModelScope.launch {
+            _asignatura.value = firestoreManager.getAsignaturaById(asignaturaId)
+        }
+    }
+
     fun onAddAsignaturaSelected() {
         _uiState.update { it.copy(showAddAsignaturaDialog = true) }
     }
+
     fun dismisShowAddAsignaturaDialog() {
         _uiState.update { it.copy(showAddAsignaturaDialog = false) }
     }
+
     fun onLogoutSelected() {
         _uiState.update { it.copy(showLogoutDialog = true) }
     }
+
     fun dismisShowLogoutDialog() {
         _uiState.update { it.copy(showLogoutDialog = false) }
     }
@@ -69,7 +83,8 @@ data class UiState(
     val showLogoutDialog: Boolean = false
 )
 
-class InicioViewModelFactory(private val firestoreManager: FirestoreManager): ViewModelProvider.Factory {
+class InicioViewModelFactory(private val firestoreManager: FirestoreManager) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return InicioViewModel(firestoreManager) as T
     }
