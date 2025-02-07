@@ -65,7 +65,6 @@ import com.munozcastrovirginia.proyectoapi.model.Asignatura
 import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 
 
-// Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScreenInicio(
@@ -74,10 +73,6 @@ fun ScreenInicio(
     navigateToLogin: () -> Unit,
     navigateToDetalle: (String) -> Unit
 ) {
-//    val characters by viewModel2.characterList.collectAsState()
-//    val isLoading = characters.isEmpty()
-
-    var showDialog by remember { mutableStateOf(false) }
     val user = auth.getCurrentUser()
     val factory = InicioViewModelFactory(firestore)
     val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factory)
