@@ -42,12 +42,14 @@ fun Navegacion(auth: AuthManager) {
             ) { navController.popBackStack() }
         }
 
-        composable <forgotPassword> {
+        composable<forgotPassword> {
             ForgotPasswordScreen(
                 auth
-            ) { navController.navigate(login) {
-                popUpTo(login){ inclusive = true }
-            } }
+            ) {
+                navController.navigate(login) {
+                    popUpTo(login) { inclusive = true }
+                }
+            }
         }
 
         composable<screenInicio> {
@@ -56,7 +58,7 @@ fun Navegacion(auth: AuthManager) {
                 firestore,
                 {
                     navController.navigate(login) {
-                        popUpTo(screenInicio){ inclusive = true }
+                        popUpTo(screenInicio) { inclusive = true }
                     }
                 },
                 { id ->
@@ -68,7 +70,11 @@ fun Navegacion(auth: AuthManager) {
         composable<screenDetalle> { backStackEntry ->
             val detalle = backStackEntry.toRoute<screenDetalle>()
             val id = detalle.id
-            ScreenDetalle(id, auth, firestore)
+            ScreenDetalle(id, auth, firestore, {
+                navController.navigate(login) {
+                    popUpTo(screenInicio) { inclusive = true }
+                }
+            })
         }
 
 //        composable<listaPersonajes> {
