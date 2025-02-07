@@ -118,14 +118,14 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.ic_firebase),
-//                contentDescription = "Firebase",
-//                modifier = Modifier.size(100.dp)
-//            )
+            Image(
+                painter = painterResource(id = R.drawable.logo_hermanos_machado),
+                contentDescription = "Firebase",
+                modifier = Modifier.size(100.dp)
+            )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Firebase Android",
+                text = "IES Hermanos Machado",
                 style = TextStyle(fontSize = 30.sp)
             )
             Spacer(modifier = Modifier.height(30.dp))

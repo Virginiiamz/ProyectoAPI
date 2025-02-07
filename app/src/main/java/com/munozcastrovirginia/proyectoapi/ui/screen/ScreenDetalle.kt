@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -165,6 +166,11 @@ fun ScreenDetalle(
                 .fillMaxSize()
                 .padding(it)
         ) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text("Lista de profesores de la asignatura ${asignatura?.nombre}",  style = TextStyle(fontSize = 24.sp))
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
             if (uiStateInicio.showLogoutDialog) {
                 LogoutDialog(
                     onDismiss = { inicioViewModel.dismisShowLogoutDialog() },
@@ -197,8 +203,10 @@ fun ScreenDetalle(
             }
 
             if (!uiStateDetalle.profesores.isNullOrEmpty()) {
+
+
                 LazyColumn(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(top = 60.dp)
                 ) {
                     items(uiStateDetalle.profesores) { profesor ->
                         ProfesorItem(
