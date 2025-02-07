@@ -72,7 +72,7 @@ fun ScreenDetalle(
     val factoryInicio = InicioViewModelFactory(firestore)
     val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factoryInicio)
 
-    val factoryDetalle = DetalleViewModelFactory(firestore)
+    val factoryDetalle = DetalleViewModelFactory(firestore, idAsignatura)
     val detalleViewModel = viewModel(DetalleViewModel::class.java, factory = factoryDetalle)
 
     val asignatura by inicioViewModel.asignatura.collectAsState()

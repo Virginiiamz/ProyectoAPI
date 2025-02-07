@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetalleViewModel(val firestoreManager: FirestoreManager) : ViewModel() {
+class DetalleViewModel(val firestoreManager: FirestoreManager, idAsignatura: String) : ViewModel() {
 
     val _uiState = MutableStateFlow(UiStateDetalle())
     val uiState: StateFlow<UiStateDetalle> = _uiState
@@ -25,7 +25,7 @@ class DetalleViewModel(val firestoreManager: FirestoreManager) : ViewModel() {
     init {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            firestoreManager.getProfesores().collect { profesores ->
+            firestoreManager.getProfesoresByAsignaturaId(idAsignatura).collect { profesores ->
                 _uiState.update { uiState ->
                     uiState.copy(
                         profesores = profesores,
@@ -66,9 +66,9 @@ data class UiStateDetalle(
     val showLogoutDialog: Boolean = false
 )
 
-class DetalleViewModelFactory(private val firestoreManager: FirestoreManager) :
+class DetalleViewModelFactory(private val firestoreManager: FirestoreManager,val idAsignatura: String) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetalleViewModel(firestoreManager) as T
+        return DetalleViewModel(firestoreManager, idAsignatura) as T
     }
 }

@@ -74,9 +74,9 @@ class FirestoreManager(auth: AuthManager, context: Context) {
 
 //    Funciones de los profesores
 
-    fun getProfesores(): Flow<List<Profesor>> {
+    fun getProfesoresByAsignaturaId(asignaturaId: String): Flow<List<Profesor>> {
         return firestore.collection(PROFESOR_COLLECTION)
-            .whereEqualTo("userId", userId)
+            .whereEqualTo("asignaturaId", asignaturaId)
             .snapshots()
             .map { qs ->
                 qs.documents.mapNotNull { ds ->
