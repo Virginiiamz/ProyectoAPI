@@ -1,23 +1,33 @@
 package com.munozcastrovirginia.proyectoapi.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ExitToApp
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -26,6 +36,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,6 +57,8 @@ import coil.request.ImageRequest
 import com.munozcastrovirginia.proyectoapi.R
 import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
+import com.munozcastrovirginia.proyectoapi.model.Asignatura
+import com.munozcastrovirginia.proyectoapi.model.Profesor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,10 +69,15 @@ fun ScreenDetalle(
     navigateToLogin: () -> Unit,
 ) {
     val user = auth.getCurrentUser()
-    val factory = InicioViewModelFactory(firestore)
-    val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factory)
+    val factoryInicio = InicioViewModelFactory(firestore)
+    val inicioViewModel = viewModel(InicioViewModel::class.java, factory = factoryInicio)
+
+    val factoryDetalle = DetalleViewModelFactory(firestore)
+    val detalleViewModel = viewModel(DetalleViewModel::class.java, factory = factoryDetalle)
+
     val asignatura by inicioViewModel.asignatura.collectAsState()
-    val uiState by inicioViewModel.uiState.collectAsState()
+    val uiStateInicio by inicioViewModel.uiState.collectAsState()
+    val uiStateDetalle by detalleViewModel.uiState.collectAsState()
 
     LaunchedEffect(idAsignatura) {
         inicioViewModel.getAsignaturaById(idAsignatura)
@@ -132,10 +153,10 @@ fun ScreenDetalle(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { inicioViewModel.onAddAsignaturaSelected() },
+                onClick = { detalleViewModel.onAddProfesorSelected() },
                 containerColor = Color.Gray
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir profesor")
             }
         }
     ) {
@@ -144,7 +165,7 @@ fun ScreenDetalle(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            if (uiState.showLogoutDialog) {
+            if (uiStateInicio.showLogoutDialog) {
                 LogoutDialog(
                     onDismiss = { inicioViewModel.dismisShowLogoutDialog() },
                     onConfirm = {
@@ -152,6 +173,132 @@ fun ScreenDetalle(
                         navigateToLogin()
                         inicioViewModel.dismisShowLogoutDialog()
                     }
+                )
+            }
+
+            if (uiStateDetalle.showAddProfesorDialog) {
+                AddProfesorDialog(
+                    onProfesorAdded = { profesor ->
+                        detalleViewModel.addProfesor(
+                            Profesor(
+                                id = "",
+                                asignaturaId = asignatura?.id,
+                                userId = auth.getCurrentUser()?.uid,
+                                profesor.nombre ?: "",
+                                profesor.apellidos ?: "",
+                                profesor.email ?: ""
+                            )
+                        )
+                        detalleViewModel.dismisShowAddProfesorDialog()
+                    },
+                    onDialogDismissed = { detalleViewModel.dismisShowAddProfesorDialog() },
+                    auth
+                )
+            }
+
+            if (!uiStateDetalle.profesores.isNullOrEmpty()) {
+                LazyColumn(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    items(uiStateDetalle.profesores) { profesor ->
+                        ProfesorItem(
+                            profesor = profesor,
+                            deleteProfesor = {
+                                inicioViewModel.deleteAsignaturaById(
+                                    profesor.id ?: ""
+                                )
+                            },
+                            updateProfesor = {
+//                                inicioViewModel.updateAsignatura(profesor)
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
+            } else {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("No hay datos")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ProfesorItem(
+    profesor: Profesor,
+    deleteProfesor: () -> Unit,
+    updateProfesor: (Profesor) -> Unit,
+) {
+
+    var showDeleteProfesorDialog by remember { mutableStateOf(false) }
+    var showUpdateProfesorDialog by remember { mutableStateOf(false) }
+
+//    if (showDeleteProfesorDialog) {
+//        DeleteAsignaturaDialog(
+//            onConfirmDelete = {
+//                deleteAsignatura()
+//                showDeleteProfesorDialog = false
+//            },
+//            onDismiss = { showDeleteProfesorDialog = false }
+//        )
+//    }
+
+//    if (showUpdateProfesorDialog) {
+//        UpdateAsignaturaDialog(
+//            asignatura = asignatura,
+//            onAsignaturaUpdated = { asignatura ->
+//                updateAsignatura(asignatura)
+//                showUpdateAsignaturaDialog = false
+//            },
+//            onDialogDismissed = { showUpdateAsignaturaDialog = false }
+//        )
+//    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+
+
+    ) {
+        Row(modifier = Modifier.padding(16.dp)) {
+            Column {
+                Text(text = "Profesor", style = MaterialTheme.typography.titleLarge)
+                Text(
+                    text = "Nombre: ${profesor.nombre}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = "Apellidos: ${profesor.apellidos}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Text(
+                    text = "Email: ${profesor.email}",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(AbsoluteAlignment.Right)
+        ) {
+            IconButton(
+                onClick = { showUpdateProfesorDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Actualizar Profesor"
+                )
+            }
+            IconButton(
+                onClick = { showDeleteProfesorDialog = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Borrar Profesor"
                 )
             }
         }
