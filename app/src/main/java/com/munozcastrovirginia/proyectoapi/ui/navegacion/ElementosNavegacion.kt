@@ -15,3 +15,6 @@ object forgotPassword
 @Serializable
 object screenInicio
 
+@Serializable
+object screenDetalle
+

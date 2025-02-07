@@ -2,6 +2,7 @@ package com.munozcastrovirginia.proyectoapi.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -66,7 +67,12 @@ import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 // Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenInicio(auth: AuthManager, firestore: FirestoreManager, navigateToLogin: () -> Unit) {
+fun ScreenInicio(
+    auth: AuthManager,
+    firestore: FirestoreManager,
+    navigateToLogin: () -> Unit,
+    navigateToDetalle: () -> Unit
+) {
 //    val characters by viewModel2.characterList.collectAsState()
 //    val isLoading = characters.isEmpty()
 
@@ -197,10 +203,14 @@ fun ScreenInicio(auth: AuthManager, firestore: FirestoreManager, navigateToLogin
                     items(uiState.asignaturas) { asignatura ->
                         AsignaturaItem(
                             asignatura = asignatura,
-                            { inicioViewModel.deleteAsignaturaById(asignatura.id ?: "") }
-                        ) {
-                            inicioViewModel.updateAsignatura(it)
-                        }
+                            deleteAsignatura = {
+                                inicioViewModel.deleteAsignaturaById(
+                                    asignatura.id ?: ""
+                                )
+                            },
+                            updateAsignatura = { inicioViewModel.updateAsignatura(asignatura) },
+                            navigateToDetalle = { navigateToDetalle() }
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -219,7 +229,8 @@ fun ScreenInicio(auth: AuthManager, firestore: FirestoreManager, navigateToLogin
 fun AsignaturaItem(
     asignatura: Asignatura,
     deleteAsignatura: () -> Unit,
-    updateAsignatura: (Asignatura) -> Unit
+    updateAsignatura: (Asignatura) -> Unit,
+    navigateToDetalle: () -> Unit
 ) {
 
     var showDeleteAsignaturaDialog by remember { mutableStateOf(false) }
@@ -249,8 +260,10 @@ fun AsignaturaItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { navigateToDetalle() },
         elevation = CardDefaults.cardElevation(4.dp)
+
 
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
@@ -270,9 +283,11 @@ fun AsignaturaItem(
                 )
             }
         }
-        Row(modifier = Modifier
-            .padding(16.dp)
-            .align(AbsoluteAlignment.Right)) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .align(AbsoluteAlignment.Right)
+        ) {
             IconButton(
                 onClick = { showUpdateAsignaturaDialog = true }
             ) {
