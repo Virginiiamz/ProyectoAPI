@@ -10,6 +10,7 @@ import com.munozcastrovirginia.proyectoapi.data.AuthManager
 import com.munozcastrovirginia.proyectoapi.data.FirestoreManager
 import com.munozcastrovirginia.proyectoapi.ui.screen.ForgotPasswordScreen
 import com.munozcastrovirginia.proyectoapi.ui.screen.LoginScreen
+import com.munozcastrovirginia.proyectoapi.ui.screen.ScreenInicio
 import com.munozcastrovirginia.proyectoapi.ui.screen.ScreenLista
 import com.munozcastrovirginia.proyectoapi.ui.screen.SignUpScreen
 
@@ -28,7 +29,7 @@ fun Navegacion(auth: AuthManager) {
                 auth,
                 { navController.navigate(signUp) },
                 {
-                    navController.navigate(listaPersonajes) {
+                    navController.navigate(screenInicio) {
                         popUpTo(login) { inclusive = true }
                     }
                 },
@@ -49,13 +50,13 @@ fun Navegacion(auth: AuthManager) {
             } }
         }
 
-        composable<listaPersonajes> {
-            ScreenLista(
+        composable<screenInicio> {
+            ScreenInicio(
                 auth,
                 firestore,
                 {
                     navController.navigate(login) {
-                        popUpTo(listaPersonajes){ inclusive = true }
+                        popUpTo(screenInicio){ inclusive = true }
                     }
                 }
             )

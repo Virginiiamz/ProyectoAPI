@@ -13,5 +13,5 @@ object signUp
 object forgotPassword
 
 @Serializable
-object listaPersonajes
+object screenInicio
 

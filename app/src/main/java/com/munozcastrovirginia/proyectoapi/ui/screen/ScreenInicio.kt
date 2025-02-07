@@ -66,7 +66,7 @@ import com.munozcastrovirginia.proyectoapi.model.AsignaturaDB
 // Composable que muestra la lista de personajes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenLista(auth: AuthManager, firestore: FirestoreManager, navigateToLogin: () -> Unit) {
+fun ScreenInicio(auth: AuthManager, firestore: FirestoreManager, navigateToLogin: () -> Unit) {
 //    val characters by viewModel2.characterList.collectAsState()
 //    val isLoading = characters.isEmpty()
 
