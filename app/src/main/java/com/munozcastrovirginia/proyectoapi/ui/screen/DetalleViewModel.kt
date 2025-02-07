@@ -14,13 +14,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetalleViewModel(val firestoreManager: FirestoreManager, idAsignatura: String) : ViewModel() {
+class DetalleViewModel(val firestoreManager: FirestoreManager,val idAsignatura: String) : ViewModel() {
 
     val _uiState = MutableStateFlow(UiStateDetalle())
     val uiState: StateFlow<UiStateDetalle> = _uiState
-
-//    private val _profesor = MutableStateFlow<Profesor?>(null)
-//    val profesor: StateFlow<Profesor?> = _profesor
 
     init {
         viewModelScope.launch {
@@ -62,14 +59,6 @@ class DetalleViewModel(val firestoreManager: FirestoreManager, idAsignatura: Str
     fun dismisShowAddProfesorDialog() {
         _uiState.update { it.copy(showAddProfesorDialog = false) }
     }
-
-    fun onLogoutSelected() {
-        _uiState.update { it.copy(showLogoutDialog = true) }
-    }
-
-    fun dismisShowLogoutDialog() {
-        _uiState.update { it.copy(showLogoutDialog = false) }
-    }
 }
 
 data class UiStateDetalle(
@@ -79,7 +68,7 @@ data class UiStateDetalle(
     val showLogoutDialog: Boolean = false
 )
 
-class DetalleViewModelFactory(private val firestoreManager: FirestoreManager,val idAsignatura: String) :
+class DetalleViewModelFactory(private val firestoreManager: FirestoreManager, private val idAsignatura: String) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DetalleViewModel(firestoreManager, idAsignatura) as T

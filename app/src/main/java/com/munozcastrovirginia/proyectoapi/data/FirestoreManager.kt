@@ -102,11 +102,7 @@ class FirestoreManager(auth: AuthManager, context: Context) {
         val profesorRef = profesor.id?.let {
             firestore.collection("Profesores").document(it)
         }
-        profesorRef?.update(
-            "nombre", profesor.nombre,
-            "apellidos", profesor.apellidos,
-            "email", profesor.email
-        )?.await()
+        profesorRef?.set(profesor)?.await()
     }
 
     suspend fun deleteProfesorById(profesorId: String) {
