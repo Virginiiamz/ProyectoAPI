@@ -47,9 +47,9 @@ class InicioViewModel(val firestoreManager: FirestoreManager) : ViewModel() {
         }
     }
 
-    fun updateAsignatura(asignatura: Asignatura) {
+    fun updateAsignatura(asignaturaNew: Asignatura) {
         viewModelScope.launch {
-            firestoreManager.updateAsignatura(asignatura)
+            firestoreManager.updateAsignatura(asignaturaNew)
         }
     }
 

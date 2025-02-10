@@ -210,7 +210,9 @@ fun ScreenInicio(
                                     asignatura.id ?: ""
                                 )
                             },
-                            updateAsignatura = { inicioViewModel.updateAsignatura(asignatura) },
+                            updateAsignatura = {
+                                inicioViewModel.updateAsignatura(it)
+                                               },
                             navigateToDetalle = { asignatura.id?.let { it1 -> navigateToDetalle(it1) } }
                         )
                         Spacer(modifier = Modifier.height(8.dp))

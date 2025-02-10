@@ -217,7 +217,7 @@ fun ScreenDetalle(
                                 )
                             },
                             updateProfesor = {
-                                detalleViewModel.updateProfesor(profesor)
+                                detalleViewModel.updateProfesor(it)
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
