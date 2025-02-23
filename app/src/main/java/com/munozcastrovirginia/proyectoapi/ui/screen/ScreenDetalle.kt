@@ -121,13 +121,15 @@ fun ScreenDetalle(
                                 text = user?.displayName ?: "Anónimo",
                                 fontSize = 20.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color= Color.White
                             )
                             Text(
                                 text = user?.email ?: "Sin correo",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color= Color.White
                             )
                         }
                     }
@@ -136,7 +138,7 @@ fun ScreenDetalle(
                     containerColor = Color(
                         ContextCompat.getColor(
                             LocalContext.current,
-                            R.color.gris_oscuro
+                            R.color.azul
                         )
                     )
                 ),
@@ -146,7 +148,8 @@ fun ScreenDetalle(
                     }) {
                         Icon(
                             Icons.AutoMirrored.Outlined.ExitToApp,
-                            contentDescription = "Cerrar sesión"
+                            contentDescription = "Cerrar sesión",
+                            tint = Color.White
                         )
                     }
                 }
@@ -155,9 +158,14 @@ fun ScreenDetalle(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { detalleViewModel.onAddProfesorSelected() },
-                containerColor = Color.Gray
+                containerColor = Color(
+                    ContextCompat.getColor(
+                        LocalContext.current,
+                        R.color.azul
+                    )
+                )
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir profesor")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir profesor", tint = Color.White)
             }
         }
     ) {

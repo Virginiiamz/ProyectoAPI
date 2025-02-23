@@ -115,13 +115,15 @@ fun ScreenInicio(
                                 text = user?.displayName ?: "Anónimo",
                                 fontSize = 20.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color= Color.White
                             )
                             Text(
                                 text = user?.email ?: "Sin correo",
                                 fontSize = 12.sp,
                                 maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
+                                color= Color.White
                             )
                         }
                     }
@@ -130,7 +132,7 @@ fun ScreenInicio(
                     containerColor = Color(
                         ContextCompat.getColor(
                             LocalContext.current,
-                            R.color.gris_oscuro
+                            R.color.azul
                         )
                     )
                 ),
@@ -140,7 +142,8 @@ fun ScreenInicio(
                     }) {
                         Icon(
                             Icons.AutoMirrored.Outlined.ExitToApp,
-                            contentDescription = "Cerrar sesión"
+                            contentDescription = "Cerrar sesión",
+                            tint = Color.White
                         )
                     }
                 }
@@ -149,9 +152,14 @@ fun ScreenInicio(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { inicioViewModel.onAddAsignaturaSelected() },
-                containerColor = Color.Gray
+                containerColor = Color(
+                    ContextCompat.getColor(
+                        LocalContext.current,
+                        R.color.azul
+                    )
+                )
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Añadir asignatura", tint = Color.White)
             }
         }
     ) {
